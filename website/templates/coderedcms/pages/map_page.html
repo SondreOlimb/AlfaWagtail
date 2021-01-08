@@ -74,15 +74,7 @@
             </div>
             <div class="article-body">
 
-                {% for my_shoe in self.owner.wagtail_extended_userprofile.shoes.all  %}
-                    {{my_shoe.shoe_name}} <br/>
-                {% endfor %}
 
-                 <br/>
-                {{self.owner.wagtail_extended_userprofile.instagram}}<br/>
-                 {% for my_shoe in self.shoe_model.all  %}
-                    {{my_shoe.shoe.shoe_name}} <br/>
-                {% endfor %}
 
 
 

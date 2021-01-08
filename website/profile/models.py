@@ -30,6 +30,8 @@ class ExtUserProfile(models.Model):
         default=''
     )
 
+    shoes = models.ManyToManyField(Shoes)
+
     @classmethod
     def get_for_user(cls, user):
         return cls.objects.get_or_create(user=user)[0]

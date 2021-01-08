@@ -32,6 +32,14 @@ def register_account_set_instagram(request):
         'help_text': _("Change/Add your Instagram")
     }
 
+@hooks.register('register_account_menu_item')
+def register_account_set_instagram(request):
+    return {
+        'url': reverse('website_templates_wagtailusers_shoes'),
+        'label': _('Add your shoes'),
+        'help_text': _("Add your shoes")
+    }
+
 
 
 

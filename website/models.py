@@ -4,30 +4,23 @@ Createable pages used in CodeRed CMS.
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-
-from modelcluster.fields import ParentalKey
 from coderedcms.forms import CoderedFormField
 from coderedcms.models import (
     CoderedArticlePage,
     CoderedArticleIndexPage,
     CoderedEmail,
     CoderedFormPage,
-    CoderedWebPage
+    CoderedWebPage,
+    CoderedPage
 )
 
-
-
-
-from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.core.fields import RichTextField
-from wagtail.images import get_image_model_string
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 
 from .snippets import *
 from .users import *
+
+from streams import blocks
 
 
 
@@ -99,10 +92,19 @@ class WebPage(CoderedWebPage):
     General use page with featureful streamfield and SEO attributes.
     Template renders all Navbar and Footer snippets in existance.
     """
+
+
+
+
     class Meta:
         verbose_name = 'Web Page'
 
     template = 'coderedcms/pages/web_page.html'
+
+    body_content_panels = CoderedWebPage.body_content_panels
+
+
+
 
 
 class AdventureIndexPage(CoderedWebPage):
@@ -177,6 +179,20 @@ class AdventurePage(CoderedWebPage):
         verbose_name=_('Display publish date'),
     )
 
+    #latitude = models.FloatField(
+       # blank=True,
+      #  null=True,
+     #   verbose_name=_("Latitude")
+    #)
+    #longitude = models.FloatField(
+     #   blank=True,
+      #  null=True,
+       # verbose_name=_("Longitude")
+   # )
+    #strava = models.CharField(max_length=255, blank=True)
+
+    #polyline = models.CharField(max_length=100000, blank=True)
+
     def get_author_name(self):
         """
         Gets author name using a fallback.
@@ -238,6 +254,35 @@ class AdventurePage(CoderedWebPage):
         )
     ]
 
+
+
+class MapPage(CoderedWebPage):
+    """
+    General use page with featureful streamfield and SEO attributes.
+    Template renders all Navbar and Footer snippets in existance.
+    """
+
+
+
+
+    class Meta:
+        verbose_name = 'Map Page'
+
+
+
+    template = 'coderedcms/pages/map_page.html'
+
+    body = StreamField(blocks.LAYOUT_STREAMBLOCKS, null=True, blank=True)
+
+    search_fields = (
+            CoderedPage.search_fields +
+            [index.SearchField('body')]
+    )
+
+    # Panels
+    body_content_panels = [
+        StreamFieldPanel('body'),
+    ]
 
 
 

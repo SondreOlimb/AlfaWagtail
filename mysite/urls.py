@@ -17,6 +17,7 @@ urlpatterns = [
     #url for profile bio
     url(r'account/change_bio/$', users.change_bio, name='website_templates_wagtailusers_change_bio'),
     url(r'account/change_instagram/$', account.change_instagram, name='website_templates_wagtailusers_instagram'),
+    url(r'account/change_shoes/$', account.change_shoes, name='website_templates_wagtailusers_shoes'),
 
     # Documents
     path('docs/', include(wagtaildocs_urls)),

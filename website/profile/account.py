@@ -23,3 +23,20 @@ def change_instagram(request):
     return TemplateResponse(request, 'coderedcms/wagtailusers/instagram.html', {
         'form': form,
     })
+
+def change_shoes(request):
+    if request.method == 'POST':
+        form = ShoesForm(request.POST, instance=ExtUserProfile.get_for_user(request.user))
+
+        if form.is_valid():
+            form.save()
+
+
+            messages.success(request, _("Your Instagram has been changed successfully!"))
+            return redirect('wagtailadmin_account')
+    else:
+        form = ShoesForm(instance=ExtUserProfile.get_for_user(request.user))
+
+    return TemplateResponse(request, 'coderedcms/wagtailusers/change_shoes.html', {
+        'form': form,
+    })

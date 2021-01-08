@@ -10,3 +10,10 @@ class InstagramForm(forms.ModelForm):
     class Meta:
         model = ExtUserProfile
         fields = ("instagram",)
+
+class ShoesForm(forms.ModelForm):
+    shoes = forms.CheckboxSelectMultiple()
+
+    class Meta:
+        model = ExtUserProfile
+        fields = ("shoes",)
