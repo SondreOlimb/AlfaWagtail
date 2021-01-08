@@ -57,6 +57,8 @@
                     {% elif self.author %}
                     <img class="article-author-img rounded-circle mr-2" src="{% avatar_url self.author %}">
                     <span class="article-author">{{self.get_author_name}}</span>
+                    <span class="article-author">{{self.owner.wagtail_userprofile.bio}}</span>
+                    <span class="article-author">{{user.wagtail_extended_userprofile.instagram}}</span>
                     {% endif %}
 
                     {% if self.get_author_name and self.get_pub_date %}

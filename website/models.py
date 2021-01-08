@@ -15,6 +15,9 @@ from coderedcms.models import (
     CoderedWebPage
 )
 
+
+
+
 from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.core.fields import RichTextField
@@ -24,6 +27,7 @@ from wagtail.search import index
 
 
 from .snippets import *
+from .users import *
 
 
 
@@ -150,8 +154,11 @@ class AdventurePage(CoderedWebPage):
         blank=True,
         verbose_name=_('Caption'),
     )
+
+
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+
         null=True,
         blank=True,
         editable=True,
