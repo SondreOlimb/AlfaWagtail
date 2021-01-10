@@ -1,0 +1,61 @@
+<head>
+
+    <script src="https://kit.fontawesome.com/55ed74d667.js" crossorigin="anonymous"></script>
+
+      <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/brands.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
+
+</head>
+
+<script>
+            function myFunction(x) {
+                          x.classList.toggle("fa-chevron-up");
+                        }
+    </script>
+
+
+<div class="col-fluid order-2 align-items-center d-flex flex-column mt-0 " style=" " >
+    <a href=" # ">
+    {% if page.owner.wagtail_userprofile.avatar%}
+
+        <img class="img-fluid rounded-circle mt-0 pt-0"  alt="100x100" src="{{ page.owner.wagtail_userprofile.avatar.url }}" style = "width: 10rem; height: 10rem">
+    {% else %}
+        <img class="img-fluid rounded-circle mt-0 pt-0"  alt="100x100" src="{{ page.owner.wagtail_userprofile.avatar.url }}" style = "width: 10rem; height: 10rem">
+    {% endif %}
+    </a>
+
+    <a href="#" style="color: white; font-size: 30px">
+        {{page.owner.get_full_name}}
+    </a>
+
+
+
+
+
+
+        <div class="collapse " id="collapseProfile" style="width: 100%; ">
+          <div class="card bg-dark card-body align-items-center d-flex border-0 " style="width: 100%; ">
+              Bio:<br/>
+              {{ page.owner.wagtail_userprofile.bio }}
+              <br/>
+                Social media: <br/>
+              {% if page.owner.wagtail_extended_userprofile.instagram %}
+
+              <a style="text-decoration: none; color: white !important;" class = "text-light p-0 m-0" href="{{ page.owner.wagtail_extended_userprofile.instagram }}">
+              <br/>
+                <i class="fab fa-instagram fa-3x"></i>
+                  </a>
+              {% endif %}
+
+
+
+          </div>
+        </div>
+
+        <p>
+      <a style = " margin: 0 !important; " class="btn btn-transparent  " type="button" data-toggle="collapse" data-target="#collapseProfile" aria-expanded="false" aria-controls="collapseProfile">
+         <i onclick="myFunction(this)"  class="fas fa-angle-down fa-2x " style="color:red" ></i>
+      </a>
+        </p>
+    </div>

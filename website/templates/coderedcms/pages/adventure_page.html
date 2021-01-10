@@ -2,6 +2,19 @@
 
 {% load wagtailadmin_tags wagtailcore_tags wagtailimages_tags coderedcms_tags %}
 
+<head>
+    <!--forntaawsome-->
+    <script src="https://kit.fontawesome.com/55ed74d667.js" crossorigin="anonymous"></script>
+
+      <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/brands.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
+    <!-- fontaawsome end-->
+</head>
+
+
+
+
 {% block description %}{{self.get_description}}{% endblock %}
 {% block html_seo_extra %}
 {% if self.get_author_name %}<meta name="author" content="{{self.get_author_name}}" />{% endif %}
@@ -73,6 +86,8 @@
                 <hr>
             </div>
             <div class="article-body">
+                <!--
+                {{self.owner.get_full_name}}
 
                 {% for my_shoe in self.owner.wagtail_extended_userprofile.shoes.all  %}
                     {{my_shoe.shoe_name}} <br/>
@@ -81,12 +96,20 @@
                  <br/>
                 {{self.owner.wagtail_extended_userprofile.instagram}}<br/>
                  {% for my_shoe in self.shoe_model.all  %}
-                    {{my_shoe.shoe.shoe_name}} <br/>
+                    {{my_shoe.shoe.shoe_name}}<br/>
+
                 {% endfor %}
 
 
+                    -->
 
+                <!---
                 {% include_block self.body with settings=settings %}
+                -->
+
+                {% for block in self.body %}
+                    {% include_block block %}
+                {% endfor %}
             </div>
         </div>
     </article>

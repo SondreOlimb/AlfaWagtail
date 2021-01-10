@@ -13,6 +13,8 @@ from wagtail.core import blocks
 
 from django.utils.translation import gettext_lazy as _
 
+from mysite.settings.base import STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET,STRAVA_REFRESH_TOKEN
+
 from coderedcms.blocks.stream_form_blocks import (
     CoderedStreamFormCharFieldBlock,
     CoderedStreamFormCheckboxesFieldBlock,
@@ -30,7 +32,6 @@ from coderedcms.blocks.stream_form_blocks import (
 )
 from coderedcms.blocks.html_blocks import (
     ButtonBlock,
-    EmbedGoogleMapBlock,
     ImageBlock,
     ImageLinkBlock,
     DownloadBlock,
@@ -77,19 +78,54 @@ from coderedcms.blocks.base_blocks import (  # noqa
 
 from wagtail.core.blocks import RawHTMLBlock
 
+import requests
+import urllib3
+import polyline
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+class ProfileBlock(blocks.StructBlock):
+    class Meta:
+        template = "streams/profile_block.html"
+        icon = "fa-user"
+        label = _("Profile")
+
+class TripShoeBlock(blocks.StructBlock):
+    class Meta:
+        template = "streams/trip_shoe_block.html"
+        icon = "fa-star"
+        label = _("Your shoes")
+
+class TripMapBlock(blocks.StructBlock):
+    """
+    A map that shows the polyline of the trip ass well as marker of destination
+    """
+
+
+
+
+
+
+
+    class Meta:
+        template = "streams/trip_map_block.html"
+        icon = "fa-map-marker "
+        label = _("Trip Map Block")
+
 
 class MapBlock(blocks.StructBlock):
-    """Main MapboxMap"""
-    #title = blocks.CharBlock(required=True, help_text="Add your title")
+    """
+    Main Mapbox Map
+    """
 
-   # cards = blocks.ListBlock(
-    #    blocks.StructBlock([
-     #       ]
-    #)
     class Meta:
         template = "streams/map_block.html"
-        icon ="placeholder"
-        label = "Map Block"
+        icon = "fa-map"
+        label = _("Map")
+
+
+
+
 
 
 # Collections of blocks commonly used together.
@@ -105,6 +141,9 @@ HTML_STREAMBLOCKS = [
     ('quote', QuoteBlock()),
     ('table', TableBlock()),
     ('MapBox_map', MapBlock()),
+    ("Trip_map" , TripMapBlock()),
+    ("Profile",ProfileBlock()),
+    ("Shoe_element", TripShoeBlock()),
     ('page_list', PageListBlock()),
     ('page_preview', PagePreviewBlock()),
 ]

@@ -4,19 +4,19 @@
 {% block index_content %}
 <div class="container">
     <div class="row d-flex">
-        {% for adventure in page.get_children.specific %}
+        {% for cupcake in page.get_children.specific %}
         <div class="col m-3">
             <div class="card border-cherry" style="width: 18rem;">
-                {% if adventure.cover_image %}
-                {% image adventure.specific.cover_image fill-300x300 as adventure_img %}
-                <a href="{{adventure.url}}">
-                    <img class="card-img-top w-100" src="{{adventure_img.url}}" alt="{{adventure.title}}">
+                {% if cupcake.photo %}
+                {% image cupcake.photo fill-300x300 as cupcake_photo %}
+                <a href="{{cupcake.url}}">
+                    <img class="card-img-top w-100" src="{{cupcake_photo.url}}" alt="{{cupcake.title}}">
                 </a>
                 {% endif %}
                 <div class="card-body">
                 <div class="card-text">
-                    <h3><a class="text-cherry" href="{{adventure.url}}">{{ adventure.title}}</a></h3>
-
+                    <h3><a class="text-cherry" href="{{cupcake.url}}">{{cupcake.title}}</a></h3>
+                    <p class="lead">{{cupcake.days_available}}</p>
                 </div>
                 </div>
             </div>

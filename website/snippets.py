@@ -65,10 +65,22 @@ class Shoes(ClusterableModel):
         help_text=_('Link to the model on alfa.no'),
     )
 
+    water_resistance = models.IntegerField(blank=True)
+    breathability = models.IntegerField(blank=True)
+    sole_stiffness = models.IntegerField(blank=True)
+    isolation = models.IntegerField(blank=True)
+    ankle_stabilization = models.IntegerField(blank=True)
+
     panels = [
         FieldPanel('shoe_name'),
         ImageChooserPanel("shoe_photo"),
         FieldPanel('shoe_URL'),
+        FieldPanel('water_resistance'),
+        FieldPanel('breathability'),
+        FieldPanel('isolation'),
+        FieldPanel('ankle_stabilization'),
+
+
     ]
 
     def __str__(self):

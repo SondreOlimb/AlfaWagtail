@@ -22,6 +22,11 @@ from .users import *
 
 from streams import blocks
 
+import requests
+import polyline
+from mysite.settings.base import STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET,STRAVA_REFRESH_TOKEN
+
+
 
 
 
@@ -103,9 +108,44 @@ class WebPage(CoderedWebPage):
 
     body_content_panels = CoderedWebPage.body_content_panels
 
+class ProfileIndexPage(CoderedWebPage):
+
+    class Meta:
+        verbose_name = "Profile index page"
+
+    # Override to specify custom index ordering choice/default.
+    index_query_pagemodel = 'website.ProfilePage'
+
+    # Only allow CupcakesPages beneath this page.
+    subpage_types = ['website.Profile']
+
+    template = 'coderedcms/pages/profile_index_page.html'
+
+    layout_panels = CoderedWebPage.layout_panels
+
+    def get_context(self, request, *args, **kwargs):
+        """adding custom stuff to our content"""
+
+        context = super().get_context(request,*args,**kwargs)
+
+
+        context["posts"] = ProfilePage.objects.live().public().specific().order_by('-first_published_at').filter(owner=request.user)
 
 
 
+class ProfilePage(CoderedWebPage):
+    class Meta:
+        verbose_name = "Profile index page"
+
+    # Override to specify custom index ordering choice/default.
+
+
+    # Only allow CupcakesPages beneath this page.
+    parent_page_types = ['website.ProfileIndexPage']
+
+    template = 'coderedcms/pages/profile_index_page.html'
+
+    layout_panels = CoderedWebPage.layout_panels
 
 class AdventureIndexPage(CoderedWebPage):
     """
@@ -179,19 +219,71 @@ class AdventurePage(CoderedWebPage):
         verbose_name=_('Display publish date'),
     )
 
-    #latitude = models.FloatField(
-       # blank=True,
-      #  null=True,
-     #   verbose_name=_("Latitude")
-    #)
-    #longitude = models.FloatField(
-     #   blank=True,
-      #  null=True,
-       # verbose_name=_("Longitude")
-   # )
-    #strava = models.CharField(max_length=255, blank=True)
 
-    #polyline = models.CharField(max_length=100000, blank=True)
+    lat = models.FloatField(
+        null=True,
+        blank=True,
+        verbose_name=_('Latitude'),
+        help_text="Latitude of the destination"
+    )
+    lng = models.FloatField(
+        null=True,
+        blank=True,
+        verbose_name=_('Longitude'),
+        help_text="Longitude of the destination"
+    )
+    strava = models.CharField(max_length=255, null=True, blank=True, verbose_name=_("Strava"), help_text="Strava activity id")
+
+    trip_polyline = models.CharField(max_length=100000, null=True, blank=True)
+
+
+
+    def get_polyline(self):
+        if self.trip_polyline:
+            path = polyline.decode(self.trip_polyline, geojson=True)
+            poly = []
+
+            for i in path:
+                poly.append([i[0], i[1]])
+            return poly
+        elif not self.trip_polyline:
+            auth_url = "https://www.strava.com/oauth/token"
+            # activites_url = "https://www.strava.com/api/v3/athlete/activities/{4056947490}"
+            activites_url = "https://www.strava.com/api/v3/activities/" + str(self.strava)
+
+            payload = {
+                'client_id': STRAVA_CLIENT_ID,
+                'client_secret': STRAVA_CLIENT_SECRET,
+                'refresh_token': STRAVA_REFRESH_TOKEN,
+                'grant_type': "refresh_token",
+                'f': 'json'
+            }
+
+
+
+            res = requests.post(auth_url, data=payload, verify=False)
+            access_token = res.json()["access_token"]
+
+            header = {'Authorization': 'Bearer ' + access_token}
+            param = {'per_page': 2, 'page': 1}
+            my_dataset = requests.get(activites_url, headers=header, params=param).json()
+            strava_tempsave = my_dataset["map"]["polyline"]
+            path = polyline.decode(strava_tempsave, geojson=True)
+
+            self.trip_polyline = strava_tempsave
+            self.save()
+
+            poly = []
+            test = "Test"
+            for i in path:
+                poly.append([i[0], i[1]])
+            return poly
+
+        else:
+            self.trip_polyline = "ERROR"
+            self.trip_polyline.save()
+            return "error"
+
 
     def get_author_name(self):
         """
@@ -223,6 +315,49 @@ class AdventurePage(CoderedWebPage):
             return self.body_preview
         return ''
 
+    body = StreamField(blocks.LAYOUT_STREAMBLOCKS, null=True, blank=True)
+
+    search_fields = (
+            CoderedPage.search_fields +
+            [index.SearchField('body'),
+             index.SearchField('caption', boost=2),
+             index.FilterField('author'),
+             index.FilterField('author_display'),
+             index.FilterField('date_display'),
+             ]
+    )
+
+    # Panels
+    body_content_panels = [
+        StreamFieldPanel('body'),
+        ImageChooserPanel("banner_image"),
+        FieldPanel('caption'),
+        MultiFieldPanel(
+            [
+                FieldPanel('author'),
+                FieldPanel('author_display'),
+                FieldPanel('date_display'),
+            ],
+            _('Publication Info')
+        ),
+        MultiFieldPanel(
+            [
+                FieldPanel('lat'),
+                FieldPanel('lng'),
+                FieldPanel('strava'),
+                FieldPanel('trip_polyline')
+            ],
+            _('Trip info')
+        ),
+        MultiFieldPanel(
+            [
+                InlinePanel("shoe_model", label="Shoe", min_num=0, max_num=4)
+            ],
+            heading="Shoe(s)"
+        )
+    ]
+
+"""
     search_fields = (
             CoderedWebPage.search_fields +
             [
@@ -253,7 +388,7 @@ class AdventurePage(CoderedWebPage):
             heading="Shoe(s)"
         )
     ]
-
+"""
 
 
 class MapPage(CoderedWebPage):

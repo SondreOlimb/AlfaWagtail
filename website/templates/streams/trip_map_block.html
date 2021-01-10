@@ -1,0 +1,130 @@
+
+
+<head>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css" rel="stylesheet" />
+
+    <script src="https://kit.fontawesome.com/55ed74d667.js" crossorigin="anonymous"></script>
+
+      <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/brands.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
+
+</head>
+
+
+
+
+
+
+    <style>
+    #map {
+
+    width: 100%;
+    height: 30vh;
+
+}
+
+
+
+
+    </style>
+
+
+
+<script>
+            function myFunction(x) {
+                          x.classList.toggle("fa-chevron-up");
+                        }
+    </script>
+
+
+
+
+
+
+    <div class ="container-fluid justify-content-center text-center m-0 mb-5 p-0" >
+            <div class = " rounded " id='map'  ></div>
+
+
+                    <script>
+                    mapboxgl.accessToken = "{{ settings.site_settings.MapboxApiApiSettings.mapbox_maps_api_key }}";
+                     var map = new mapboxgl.Map({
+                        container: 'map',
+                        style: 'mapbox://styles/mapbox/light-v10',
+                        center: [{{ page.lng }},{{ page.lat }}],
+                        zoom: 10
+                    });
+
+                    {% if page.lat and page.lng %}
+                    var marker = new mapboxgl.Marker({color:"red"})
+                        .setLngLat([{{ page.lng }},{{ page.lat }}])
+                        .addTo(map);
+                        {% endif %}
+
+
+
+                    {% if page.get_polyline %}
+                    map.on('load', function () {
+                                map.addSource('route', {
+                                'type': 'geojson',
+                                'data': {
+                                'type': 'Feature',
+                                'properties': {},
+                                'geometry': {
+                                'type': 'LineString',
+                                'coordinates': {{ page.get_polyline }}
+                                }
+                                }
+                                });
+                                map.addLayer({
+                                'id': 'route',
+                                'type': 'line',
+                                'source': 'route',
+                                'layout': {
+                                'line-join': 'round',
+                                'line-cap': 'round'
+                                },
+                                'paint': {
+                                'line-color': '#FF0000',
+                                'line-width': 4
+                                }
+                                });
+                                });
+                    {% endif %}
+
+
+
+
+                    map.addControl(new mapboxgl.FullscreenControl());
+
+
+
+
+
+                    </script>
+
+
+
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+              <p>Latitude: {{ page.lat|floatformat:4 }} Longitude: {{page.lng|floatformat:4 }} </p>
+          </div>
+        </div>
+
+        <p>
+          <a style="font-size: 15px;" class=" m-0 p-0" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <i onclick="myFunction(this)" class="fas fa-chevron-down fa-2x" style="color: red"></i>
+          </a>
+
+        </p>
+
+
+
+
+    </div>
+
+
+
+
