@@ -1,0 +1,158 @@
+{% load wagtailcore_tags wagtailimages_tags coderedcms_tags %}
+
+<head>
+
+    <script src="https://kit.fontawesome.com/55ed74d667.js" crossorigin="anonymous"></script>
+
+      <link href="/your-path-to-fontawesome/css/fontawesome.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/brands.css" rel="stylesheet">
+      <link href="/your-path-to-fontawesome/css/solid.css" rel="stylesheet">
+
+</head>
+
+<script>
+            function myFunction(x) {
+                          x.classList.toggle("fa-chevron-up");
+                        }
+    </script>
+
+
+
+        <!-- hide on screens lager smaler than lg -->
+                <div class="d-none d-lg-block">
+                    <div class ="row justify-content-center">
+                        {% for my_shoe in self.owner.wagtail_extended_userprofile.shoes.all|slice:":3"  %}
+                        <div class="col-md-4">
+                            {% image my_shoe.shoe_photo width-1000 as shoe_img %}
+                        <div>
+                            <img src="{{ shoe_img.url }}" class="d-block rounded-circle m-a" alt="..." style = "width: 10rem; height: 10rem; margin: auto;">
+                        </div>
+
+                            {{my_shoe.shoe_name}}
+
+                            <div class="collapse " id="collapseShoe" style="width: 100%; ">
+                          <div class="card bg-dark card-body align-items-center d-flex border-0 " style="width: 100%; ">
+                              <div class="d-block text-center w-100">
+                                    Water resistance
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.water_resistance }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.water_resistance }}%; background-color: rgb(52, 125, 241);"></div>
+                                    </div>
+                                    Breathability
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.breathability }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.breathability }}%; background-color: rgb(52, 125, 241);"></div>
+                                    </div>
+                                    Sole stiffness
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.sole_stiffness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.sole_stiffness }}%; background-color: rgb(52, 125, 241);"></div>
+                                    </div>
+                                    Isolation
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.isolation }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.isolation }}%; background-color: rgb(52, 125, 241);"></div>
+                                    </div>
+                                    Ankle stabilization
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.ankle_stabilization }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.ankle_stabilization }}%; background-color: rgb(52, 125, 241);"></div>
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+                          </div>
+                        </div>
+                            <!-- end shoe collaps-->
+
+                        </div>
+                        {% endfor %}
+
+
+
+                    </div>
+                    <p class="text-center">
+                                  <a style = " margin: 0 !important; " class="btn btn-transparent  " type="button" data-toggle="collapse" data-target="#collapseShoe" aria-expanded="false" aria-controls="collapseShoe">
+                                     <i onclick="myFunction(this)"  class="fas fa-angle-down fa-2x " style="color:red" ></i>
+                                  </a>
+                            </p>
+
+
+                </div>
+            <!-- end hide on screens smaler than lg-->
+
+
+            <!--Show on screens smaler than lg-->
+
+            <div class="d-lg-none">
+
+                <div class="container-fluid m-0 mb-2 p-0">
+
+                    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                          <div class="carousel-inner">
+                              {% for my_shoe in self.owner.wagtail_extended_userprofile.shoes.all|slice:":3"  %}
+                                    <div class="carousel-item {%if forloop.first %} active {% endif %}">
+                                      <a class = "text-light" style ='text-decoration: none; color: white !important;' href="{{ my_shoe.shoe_URL }}">
+                                                {% image my_shoe.shoe_photo width-1000 as shoe_img %}
+                                                <div>
+                                                    <img src="{{ shoe_img.url }}" class="d-block rounded-circle m-a" alt="..." style = "width: 10rem; height: 10rem; margin: auto;">
+                                                </div>
+                                                <div>
+                                                    <br/>
+                                                    <h4 class="text-center">{{ my_shoe.shoe_name }}</h4>
+                                                </div>
+                                            </a>
+
+
+                                         <div class="collapse " id="collapseShoeCaru" style="width: 100%; ">
+                                              <div class="card bg-dark card-body align-items-center d-flex border-0 " style="width: 100%; ">
+                                                  <div class="d-block text-center w-100">
+                                                        Water resistance
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.water_resistance }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.water_resistance }}%; background-color: rgb(52, 125, 241);"></div>
+                                                        </div>
+                                                        Breathability
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.breathability }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.breathability }}%; background-color: rgb(52, 125, 241);"></div>
+                                                        </div>
+                                                        Sole stiffness
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.sole_stiffness }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.sole_stiffness }}%; background-color: rgb(52, 125, 241);"></div>
+                                                        </div>
+                                                        Isolation
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.isolation }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.isolation }}%; background-color: rgb(52, 125, 241);"></div>
+                                                        </div>
+                                                        Ankle stabilization
+                                                        <div class="progress">
+                                                            <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{ my_shoe.ankle_stabilization }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ my_shoe.ankle_stabilization }}%; background-color: rgb(52, 125, 241);"></div>
+                                                        </div>
+
+
+
+                                                    </div>
+
+
+
+
+                                              </div>
+                                            </div>
+                                                <!-- end shoe collaps-->
+
+
+                                    </div>
+                              {% endfor %}
+
+                          </div>
+                        </div>
+
+
+                             <p class="text-center">
+                                      <a style = " margin: 0 !important; " class="btn btn-transparent  " type="button" data-toggle="collapse" data-target="#collapseShoeCaru" aria-expanded="false" aria-controls="collapseShoeCaru">
+                                         <i onclick="myFunction(this)"  class="fas fa-angle-down fa-2x " style="color:red" ></i>
+                                      </a>
+                                </p>
+
+                </div>
+
+            </div>

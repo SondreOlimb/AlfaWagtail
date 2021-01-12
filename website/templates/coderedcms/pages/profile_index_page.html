@@ -4,19 +4,22 @@
 {% block index_content %}
 <div class="container">
     <div class="row d-flex">
-        {% for cupcake in page.get_children.specific %}
+
+        {% for profile in page.get_children.specific %}
         <div class="col m-3">
-            <div class="card border-cherry" style="width: 18rem;">
-                {% if cupcake.photo %}
-                {% image cupcake.photo fill-300x300 as cupcake_photo %}
-                <a href="{{cupcake.url}}">
-                    <img class="card-img-top w-100" src="{{cupcake_photo.url}}" alt="{{cupcake.title}}">
+            <div class="card border-0 bg-transparent justify-content-center text-center" style="width: 18rem;">
+
+                {% if profile.owner.wagtail_userprofile.avatar %}
+
+                <a href="{{ profile.url }}">
+                    <img class="img-fluid rounded-circle mt-0 pt-0"  alt="100x100" src="{{ profile.owner.wagtail_userprofile.avatar.url }}" style = "width: 10rem; height: 10rem">
                 </a>
                 {% endif %}
+
                 <div class="card-body">
                 <div class="card-text">
-                    <h3><a class="text-cherry" href="{{cupcake.url}}">{{cupcake.title}}</a></h3>
-                    <p class="lead">{{cupcake.days_available}}</p>
+                    <h3><a href="{{profile.url}}">{{profile.owner.get_full_name}}</a></h3>
+
                 </div>
                 </div>
             </div>

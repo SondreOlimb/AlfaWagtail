@@ -23,7 +23,7 @@
 
               <div class="carousel-inner">
                   {% for my_shoe in page.shoe_model.all %}
-                    {% image my_shoe.shoe.shoe_photo width-1000 as shoe_img %}
+
 
                     <div class="carousel-item {% if forloop.first %} active {% endif %} ">
                         <a class = "text-light" style ='text-decoration: none; color: white !important;' href="{{ my_shoe.shoe.shoe_URL }}">

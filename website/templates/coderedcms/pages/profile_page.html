@@ -1,37 +1,61 @@
 {% extends "coderedcms/pages/web_page.html" %}
+
 {% load wagtailcore_tags wagtailimages_tags coderedcms_tags %}
 
-{% block content_pre_body %}
-    {% if self.cover_image %}
-    {% image page.cover_image fill-2000x1000 as cover_image %}
-    <div class="jumbotron jumotron-fluid" style="height:400px;background-image:url({{cover_image.url}});background-repeat:no-repeat; background-size:cover; background-position:center center;">
-    </div>
-    {% endif %}
-{% endblock %}
+{% block index_filters %}{% endblock %}
+
+{% block index_content %}
+{% if True %}
+    <div class="container">
+        <div class="container text-center">
+                {% if self.owner.wagtail_userprofile.avatar %}
 
 
-{% block content_body %}
-<div class="block-row">
-    <div class="container-fluid">
-        <div class="row m-4">
-            <div class="col-lg-6">
-                {% if page.photo %}
-                {% image page.photo fill-300x300 as cupcake %}
-                <div class="text-center">
-                    <img class="border-cherry" src="{{cupcake.url}}" alt="photo of {{page.title}}">
-                </div>
+                    <img class="img-fluid rounded-circle mt-0 pt-0"  alt="100x100" src="{{ self.owner.wagtail_userprofile.avatar.url }}" style = "width: 10rem; height: 10rem">
+
+
                 {% endif %}
+            <br/>
+            <h4> {{self.owner.get_full_name}}</h4>
+            {{page.owner.wagtail_userprofile.bio}}
+            <br/>
+            {% include "coderedcms/pages/profile/social_media.html" %}
+            <br/>
+            {% include "coderedcms/pages/profile/profile_shoe_element.html" %}
+
+            <hr/>
+
+        </div>
+        {% for article in posts %}
+        <div class="row">
+            {% if True %}
+            <div class="col-md">
+                <a class ="text-danger" style="color: red !important;" href="{% pageurl article %}" title="{{article.title}}">
+                {% if article.cover_image %}
+                    {% image article.specific.cover_image fill-1000x500 as cover_image %}
+                    <img src="{{cover_image.url}}" class="w-100" alt="{{article.title}}" />
+                {% else %}
+                    <p class="p-5 lead text-center bg-secondary text-white-50" style="color: white !important;">{{article.title}}</p>
+                {% endif %}
+                </a>
             </div>
-            <div class="col-lg-6">
-                <div class="py-lg-5">
-                    <h2>{{page.title}}</h2>
-                    <lead class="text-cherry">{{page.days_available}}</lead>
-                    {% if page.description %}
-                    <p>{{page.description|richtext}}</p>
-                    {% endif %}
-                </div>
+            {% endif %}
+            <div class="col-md">
+                <h3><a class ="text-danger" href="{% pageurl article %}">{{article.title}}</a></h3>
+                {% if True and article.specific.caption %}<p class="lead">{{article.specific.caption}}</p>{% endif %}
+                {% if True %}<p>{{article.specific.get_pub_date}}{% if article.owner %} &bull; {{article.owner.get_full_name}}{% endif %}</p>{% endif %}
+                {% if True %}<p>{{article.specific.body_preview}}</p>{% endif %}
             </div>
         </div>
-    </div>
+        {% if not forloop.last %}
+        <hr>
+        {% endif %}
+        {% endfor %}
+
+
+
+    {% include "coderedcms/includes/pagination.html" with items=index_paginated %}
+
 </div>
+{% endif %}
 {% endblock %}

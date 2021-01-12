@@ -70,7 +70,7 @@
                     {% elif self.author %}
                     <img class="article-author-img rounded-circle mr-2" src="{% avatar_url self.author %}">
                     <span class="article-author">{{self.get_author_name}}</span>
-                    <span class="article-author">{{self.owner.wagtail_userprofile.bio}}</span>
+
 
 
                     {% endif %}
@@ -86,6 +86,8 @@
                 <hr>
             </div>
             <div class="article-body">
+
+
                 <!--
                 {{self.owner.get_full_name}}
 

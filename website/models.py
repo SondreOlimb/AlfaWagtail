@@ -117,7 +117,7 @@ class ProfileIndexPage(CoderedWebPage):
     index_query_pagemodel = 'website.ProfilePage'
 
     # Only allow CupcakesPages beneath this page.
-    subpage_types = ['website.Profile']
+    subpage_types = ['website.ProfilePage']
 
     template = 'coderedcms/pages/profile_index_page.html'
 
@@ -143,9 +143,18 @@ class ProfilePage(CoderedWebPage):
     # Only allow CupcakesPages beneath this page.
     parent_page_types = ['website.ProfileIndexPage']
 
-    template = 'coderedcms/pages/profile_index_page.html'
+    template = 'coderedcms/pages/profile_page.html'
 
     layout_panels = CoderedWebPage.layout_panels
+
+    def get_context(self, request, *args, **kwargs):
+        """adding custom stuff to our content"""
+
+        context = super().get_context(request,*args,**kwargs)
+
+
+        context["posts"] = AdventurePagePage.objects.live().public().specific().order_by('-first_published_at').filter(owner=request.user)
+
 
 class AdventureIndexPage(CoderedWebPage):
     """
@@ -162,7 +171,40 @@ class AdventureIndexPage(CoderedWebPage):
 
     template = 'coderedcms/pages/adventure_index_page.html'
 
-    layout_panels = CoderedWebPage.layout_panels
+    index_show_subpages_default = True
+
+    index_order_by_default = '-date_display'
+    index_order_by_choices = (('-date_display', 'Display publish date, newest first'),) + \
+                             CoderedWebPage.index_order_by_choices
+
+    show_images = models.BooleanField(
+        default=True,
+        verbose_name=_('Show images'),
+    )
+    show_captions = models.BooleanField(
+        default=True,
+    )
+    show_meta = models.BooleanField(
+        default=True,
+        verbose_name=_('Show author and date info'),
+    )
+    show_preview_text = models.BooleanField(
+        default=True,
+        verbose_name=_('Show preview text'),
+    )
+
+    layout_panels = CoderedWebPage.layout_panels + [
+        MultiFieldPanel(
+            [
+                FieldPanel('show_images'),
+                FieldPanel('show_captions'),
+                FieldPanel('show_meta'),
+                FieldPanel('show_preview_text'),
+            ],
+            heading=_('Child page display')
+        ),
+    ]
+
 
 
 
@@ -420,4 +462,45 @@ class MapPage(CoderedWebPage):
     ]
 
 
+class ProfileIndexPage(CoderedWebPage):
 
+    class Meta:
+        verbose_name = "Profile index page"
+
+    # Override to specify custom index ordering choice/default.
+    index_query_pagemodel = 'website.ProfilePage'
+
+    # Only allow CupcakesPages beneath this page.
+    subpage_types = ['website.ProfilePage']
+
+    template = 'coderedcms/pages/profile_index_page.html'
+
+    layout_panels = CoderedWebPage.layout_panels
+
+
+
+
+class ProfilePage(CoderedWebPage):
+    class Meta:
+        verbose_name = "Profile page"
+
+    # Override to specify custom index ordering choice/default.
+
+
+    # Only allow CupcakesPages beneath this page.
+    parent_page_types = ['website.ProfileIndexPage']
+
+    template = 'coderedcms/pages/profile_page.html'
+
+    layout_panels = CoderedWebPage.layout_panels
+
+    def get_context(self, request, *args, **kwargs):
+        """adding custom stuff to our content"""
+
+        context = super().get_context(request,*args,**kwargs)
+
+
+
+        context["posts"] = AdventurePage.objects.live().public().specific().order_by('-first_published_at').filter(owner=request.user)
+
+        return context
