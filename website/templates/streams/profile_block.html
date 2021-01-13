@@ -16,7 +16,9 @@
 
 
 <div class="col-fluid order-2 align-items-center d-flex flex-column mt-0 " style=" " >
-    <a href=" # ">
+
+
+    <a href="{{profile.first.url}} ">
     {% if page.owner.wagtail_userprofile.avatar%}
 
         <img class="img-fluid rounded-circle mt-0 pt-0"  alt="100x100" src="{{ page.owner.wagtail_userprofile.avatar.url }}" style = "width: 10rem; height: 10rem">
@@ -25,9 +27,12 @@
     {% endif %}
     </a>
 
-    <a href="#" style="color: white; font-size: 30px">
+    <a href="{{profile.first.url}}" style="color: white; font-size: 30px">
         {{page.owner.get_full_name}}
     </a>
+
+
+
 
 
 

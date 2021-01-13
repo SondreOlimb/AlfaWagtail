@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'wagtailfontawesome',
     'wagtailcache',
     'wagtailimportexport',
+    'creator_profile',
 
     # Wagtail
     'wagtail.contrib.forms',

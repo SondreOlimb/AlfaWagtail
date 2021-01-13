@@ -1,5 +1,6 @@
 
 
+{% load wagtailadmin_tags wagtailcore_tags wagtailimages_tags coderedcms_tags %}
 
 
 
@@ -11,8 +12,7 @@
 </head>
 
 
-
-    <style>
+<style>
     #map {
 
     width: 100%;
@@ -20,13 +20,51 @@
 
 }
 
+        .mapboxgl-popup {
+            max-width: 100%;
 
 
 
 
+        }
+        .mapboxgl-popup-tip{
 
 
+        }
+        .mapboxgl-popup-content{
 
+            background-color: transparent;
+            border: none;
+            box-shadow: none;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        .mapboxgl-popup-content-wrapper{
+            color: red;
+
+            background-color: blue;
+        }
+        .mapboxgl-popup-close-button{
+            display: none;
+        }
+        .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+        .mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+        .mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+            border-bottom-color: #222222;
+            }
+        .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+        .mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+        .mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+            border-top-color: #222222;
+            }
+        .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+            border-right-color: #222222;
+            }
+        .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+            border-left-color: #222222;
+            }
     #menu {
 
 
@@ -40,13 +78,17 @@
     </style>
 
 
-
 <div class="container-fluid justify-content-center m-0 p-0"   >
-    <!--
+
     <div class="container">
-        <h1 class= " text-center " > Explore</h1>
+
+
+
+
+
+
     </div>
-    -->
+
     <div class ="container-fluid justify-content-center text-center m-0 p-0" >
         <div class ="container-fluid justify-content-center m-0 text-center"  id="menu" >
 
@@ -75,10 +117,31 @@
                         zoom: 5
                     });
 
+                     {% for post in posts %}
+                    {% if post.lat and post.lng and post.cover_image %}
+                        {% image post.cover_image fill-2000x1000 as cover_image %}
+                        var marker = new mapboxgl.Marker({color: "#FF0000"})
+                            .setLngLat([{{ post.lng }},{{ post.lat }}])
+                            .setPopup(new mapboxgl.Popup().setHTML("<a  style =' ;text-decoration: none !important; margin: 0 !important; padding: 0 !important; color: white !important;  '  href=\"{{post.url}}\"  <div class=\"card bg-dark m-0 p-0 text-light border-0\" style=\"width: 100%; color: white; margin: 0 !important; padding: 0 !important; \">\n" +
+                                "  <img src=\"{{ cover_image.url }}\" class=\"card-img-top\" alt=\"...\">\n" +
+                                "  <div class=\"card-body\">\n" +
+                                "    <h5 class=\"card-title \">{{post.title}}</h5>\n" +
+                                "    <p class=\"card-text\">{{ post.caption }}</p>\n" +
 
-                       
+                                "  </div>\n" +
+                                "</div> </a>"
+                            ))
+                            .addTo(map);
+                    {% endif %}
+                    {% endfor %}
 
-                        
+
+
+
+
+
+
+
 
                     map.addControl(new mapboxgl.FullscreenControl());
 

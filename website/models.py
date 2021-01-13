@@ -21,6 +21,8 @@ from .snippets import *
 from .users import *
 
 from streams import blocks
+import creator_profile.models
+
 
 import requests
 import polyline
@@ -47,6 +49,10 @@ class ArticlePage(CoderedArticlePage):
     template = 'coderedcms/pages/article_page.html'
     amp_template = 'coderedcms/pages/article_page.amp.html'
     search_template = 'coderedcms/pages/article_page.search.html'
+
+
+
+
 
 
 class ArticleIndexPage(CoderedArticleIndexPage):
@@ -108,52 +114,9 @@ class WebPage(CoderedWebPage):
 
     body_content_panels = CoderedWebPage.body_content_panels
 
-class ProfileIndexPage(CoderedWebPage):
-
-    class Meta:
-        verbose_name = "Profile index page"
-
-    # Override to specify custom index ordering choice/default.
-    index_query_pagemodel = 'website.ProfilePage'
-
-    # Only allow CupcakesPages beneath this page.
-    subpage_types = ['website.ProfilePage']
-
-    template = 'coderedcms/pages/profile_index_page.html'
-
-    layout_panels = CoderedWebPage.layout_panels
-
-    def get_context(self, request, *args, **kwargs):
-        """adding custom stuff to our content"""
-
-        context = super().get_context(request,*args,**kwargs)
-
-
-        context["posts"] = ProfilePage.objects.live().public().specific().order_by('-first_published_at').filter(owner=request.user)
 
 
 
-class ProfilePage(CoderedWebPage):
-    class Meta:
-        verbose_name = "Profile index page"
-
-    # Override to specify custom index ordering choice/default.
-
-
-    # Only allow CupcakesPages beneath this page.
-    parent_page_types = ['website.ProfileIndexPage']
-
-    template = 'coderedcms/pages/profile_page.html'
-
-    layout_panels = CoderedWebPage.layout_panels
-
-    def get_context(self, request, *args, **kwargs):
-        """adding custom stuff to our content"""
-
-        context = super().get_context(request,*args,**kwargs)
-
-
-        context["posts"] = AdventurePagePage.objects.live().public().specific().order_by('-first_published_at').filter(owner=request.user)
 
 
 class AdventureIndexPage(CoderedWebPage):
@@ -357,6 +320,21 @@ class AdventurePage(CoderedWebPage):
             return self.body_preview
         return ''
 
+
+    def get_context(self, request, *args, **kwargs):
+        """adding custom stuff to our content"""
+
+        context = super().get_context(request,*args,**kwargs)
+
+
+
+        context["profile"] = creator_profile.models.ProfilePage.objects.live().public().specific().filter(owner=self.owner)
+
+
+
+
+        return context
+
     body = StreamField(blocks.LAYOUT_STREAMBLOCKS, null=True, blank=True)
 
     search_fields = (
@@ -442,6 +420,7 @@ class MapPage(CoderedWebPage):
 
 
 
+
     class Meta:
         verbose_name = 'Map Page'
 
@@ -456,43 +435,12 @@ class MapPage(CoderedWebPage):
             [index.SearchField('body')]
     )
 
+
+
     # Panels
     body_content_panels = [
         StreamFieldPanel('body'),
     ]
-
-
-class ProfileIndexPage(CoderedWebPage):
-
-    class Meta:
-        verbose_name = "Profile index page"
-
-    # Override to specify custom index ordering choice/default.
-    index_query_pagemodel = 'website.ProfilePage'
-
-    # Only allow CupcakesPages beneath this page.
-    subpage_types = ['website.ProfilePage']
-
-    template = 'coderedcms/pages/profile_index_page.html'
-
-    layout_panels = CoderedWebPage.layout_panels
-
-
-
-
-class ProfilePage(CoderedWebPage):
-    class Meta:
-        verbose_name = "Profile page"
-
-    # Override to specify custom index ordering choice/default.
-
-
-    # Only allow CupcakesPages beneath this page.
-    parent_page_types = ['website.ProfileIndexPage']
-
-    template = 'coderedcms/pages/profile_page.html'
-
-    layout_panels = CoderedWebPage.layout_panels
 
     def get_context(self, request, *args, **kwargs):
         """adding custom stuff to our content"""
@@ -501,6 +449,12 @@ class ProfilePage(CoderedWebPage):
 
 
 
-        context["posts"] = AdventurePage.objects.live().public().specific().order_by('-first_published_at').filter(owner=request.user)
+        context["posts"] = AdventurePage.objects.live().public().specific()
+
+
+
+        print(context)
 
         return context
+
+
