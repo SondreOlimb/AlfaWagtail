@@ -28,6 +28,8 @@ import requests
 import polyline
 from mysite.settings.base import STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET,STRAVA_REFRESH_TOKEN
 
+from coderedcms.models.snippet_models import ClassifierTerm
+
 
 
 
@@ -451,10 +453,45 @@ class MapPage(CoderedWebPage):
 
         context["posts"] = AdventurePage.objects.live().public().specific()
 
+        if True:
+            # Get child pages
+            all_children = AdventurePage.objects.live().public().specific()
+            # Filter by classifier terms if applicable
+            if len(request.GET) > 0 and self.index_classifiers.exists():
+                # Look up comma separated ClassifierTerm slugs i.e. `/?c=term1-slug,term2-slug`
+                terms = []
+                get_c = request.GET.get('c', None)
+                if get_c:
+                    terms = get_c.split(',')
+                # Else look up individual querystrings i.e. `/?classifier-slug=term1-slug`
+                else:
+                    for classifier in self.index_classifiers.all().only('slug'):
+                        get_term = request.GET.get(classifier.slug, None)
+                        if get_term:
+                            terms.append(get_term)
+                if len(terms) > 0:
+                    selected_terms = ClassifierTerm.objects.filter(slug__in=terms)
+                    context['selected_terms'] = selected_terms
+                    if len(selected_terms) > 0:
+                        try:
+                            for term in selected_terms:
+                                all_children = all_children.filter(classifier_terms=term)
+                        except AttributeError:
+                            print("error")
+
+
+
+
+            context['index_children'] = all_children
+
+
+
 
 
         print(context)
 
         return context
+
+
 
 

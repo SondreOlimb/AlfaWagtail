@@ -113,6 +113,14 @@ class TripMapBlock(blocks.StructBlock):
         label = _("Trip Map Block")
 
 
+class FullRichTextBlock(blocks.RichTextBlock):
+    """Riche text with all features"""
+    class Meta:
+        template = "streams/richtext_block.html"
+        icon = "doc-full"
+        lable = "Full richtext"
+
+
 class MapBlock(blocks.StructBlock):
     """
     Main Mapbox Map
@@ -131,7 +139,7 @@ class MapBlock(blocks.StructBlock):
 # Collections of blocks commonly used together.
 
 HTML_STREAMBLOCKS = [
-    ('text', RichTextBlock(icon='fa-file-text-o')),
+    ('text', FullRichTextBlock(icon='fa-file-text-o')),
     ('button', ButtonBlock()),
     ('image', ImageBlock()),
     ('image_link', ImageLinkBlock()),

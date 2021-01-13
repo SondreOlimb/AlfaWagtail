@@ -1,4 +1,4 @@
-{% extends "coderedcms/pages/web_page.html" %}
+{% extends "coderedcms/pages/web_page_notitle.html" %}
 
 {% load wagtailcore_tags wagtailimages_tags coderedcms_tags %}
 
@@ -7,7 +7,7 @@
 {% block index_content %}
 {% if True %}
     <div class="container">
-        <div class="container text-center">
+        <div class="container align-items-center text-center justify-content-center">
                 {% if self.owner.wagtail_userprofile.avatar %}
 
 
@@ -16,8 +16,17 @@
 
                 {% endif %}
             <br/>
-            <h4> {{self.owner.get_full_name}}</h4>
-            {{page.owner.wagtail_userprofile.bio}}
+            <br/>
+            <h3> {{self.owner.get_full_name}}</h3>
+             <br/>
+            <br/>
+            <div class="container  d-flex justify-content-center">
+                <div class="d-flex w-50 justify-content-center">
+
+
+                    {{page.owner.wagtail_userprofile.bio}}
+                    </div>
+                </div>
             <br/>
             {% include "coderedcms/pages/profile/social_media.html" %}
             <br/>

@@ -46,7 +46,7 @@
             </div>
             {% endif %}
             <div class="col-md">
-                <h3 class="text-danger"><a class="text-danger" href="{% pageurl article %}">{{article.title}}</a></h3>
+                <h3 class="text-danger"><a style="color: red !important; text-decoration: none !important;" class="text-danger" href="{% pageurl article %}">{{article.title}}</a></h3>
                 {% if self.show_captions and article.specific.caption %}<p class="lead">{{article.specific.caption}}</p>{% endif %}
                 {% if self.show_meta %}<p>{{article.specific.get_pub_date}}{% if article.owner.get_full_name %} &bull; {{article.owner.get_full_name}}{% endif %}</p>{% endif %}
                 {% if self.show_preview_text %}<p>{{article.specific.body_preview}}</p>{% endif %}
